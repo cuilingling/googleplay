@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:itheima="http://schemas.android.com/apk/res-auto"
+<android.support.v4.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tencent="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main_drawerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -10,13 +11,7 @@
         android:layout_width="200dp"
         android:layout_height="match_parent"
         android:layout_gravity="left"
-        android:background="#0f0" />
-    <!-- 当然，你也可以声明多个Menu布局，比如下面这个从右边划出的Menu -->
-    <!--<FrameLayout-->
-    <!--android:layout_width="200dp"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:layout_gravity="right"-->
-    <!--android:background="#00f" />-->
+        android:background="#0f0"/>
 
     <!--内容区域-->
     <LinearLayout
@@ -25,10 +20,15 @@
         android:orientation="vertical">
 
         <!--PagerSlidingTabStrp-->
-        <com.astuetz.PagerSlidingTabStripExtends
+        <com.astuetz.PagerSlidingTabStripExtend
             android:id="@+id/main_tabs"
             android:layout_width="match_parent"
             android:layout_height="48dp"
+            tencent:pstsIndicatorColor="@color/tab_indicator_selected"
+            tencent:pstsSelectedTabTextColor="@color/tab_text_selected"
+            tencent:pstsSelectedTabTextSize="18sp"
+            tencent:pstsTabTextColor="@color/tab_text_normal"
+            tencent:pstsTabTextSize="16sp"
             />
 
         <!--ViewPager-->

@@ -1,17 +1,32 @@
 package com.tencent.googleplay;
 
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.Toast;
+import android.view.View;
+
+import com.astuetz.PagerSlidingTabStrip;
+import com.astuetz.PagerSlidingTabStripExtend;
+import com.tencent.googleplay.FragmentFactory.FragmentFactory;
+import com.tencent.googleplay.utils.StringUtils;
+import com.tencent.googleplay.utils.UIUtils;
 
 public class MainActivity extends AppCompatActivity {
 
     private DrawerLayout mDrawerlayout;
     private ActionBarDrawerToggle mToggle;
+    private ViewPager mViewPager;
+    private PagerSlidingTabStripExtend mTabs;
+    private String[] mMainTitles;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,10 +35,16 @@ public class MainActivity extends AppCompatActivity {
         initActionBar();
         initView();
         initActionbarDrawerToggle();
+        initData();
     }
 
+
+
     private void initView() {
+        //找到抽屉布局
         mDrawerlayout = (DrawerLayout) findViewById(R.id.main_drawerLayout);
+        mViewPager = (ViewPager) findViewById(R.id.main_viewpager);
+        mTabs = (PagerSlidingTabStripExtend) findViewById(R.id.main_tabs);
     }
 
     private void initActionbarDrawerToggle() {
@@ -54,9 +75,51 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                Toast.makeText(this, "点击了home按钮", Toast.LENGTH_SHORT).show();
-            break;
+                //点击toggle 可以改变菜单是打开还是关闭
+                mToggle.onOptionsItemSelected(item);
+                break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * 设置适配器,以及数据
+     */
+    private void initData() {
+        mMainTitles = UIUtils.getStrings(R.array.main_titles);
+        mMianpagerAdepter adepter = new mMianpagerAdepter(getSupportFragmentManager());
+        mViewPager.setAdapter(adepter);
+
+        //绑定tab
+        //pager.setOnPageChangeListener(pageListener);已经设置过监听了,所以不能再设置了.
+        //再次的设置会从新复制,之前的会覆盖掉
+        mTabs.setViewPager(mViewPager);
+    }
+
+    class mMianpagerAdepter extends FragmentStatePagerAdapter {
+
+        public mMianpagerAdepter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+
+            Fragment fragment = FragmentFactory.createFragment(position);
+            return fragment;
+        }
+
+        @Override
+        public int getCount() {
+            if (mMainTitles != null) {
+                return mMainTitles.length;
+            }
+            return 0;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return  mMainTitles[position];
+        }
     }
 }
